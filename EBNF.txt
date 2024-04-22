@@ -1,0 +1,21 @@
+BLOCK = { STATEMENT };
+
+STATEMENT = [ ASSIGNMENT | MODIFY | SAY | TURNS | CHECK ], "\n" ;
+
+ASSIGNMENT = "stat", IDENTIFIER, REL_EXP;
+MODIFY = "modify", IDENTIFIER, ("+" | "-"), TERM;
+SAY = "say", "(", REL_EXP, ")" ;
+
+REL_EXP = TERM, { "DC", TERM } ;
+
+
+CHECK = (("fail", CHECK) | ("check", IDENTIFIER, "DC", TERM, "\n","success", { ( STATEMENT ) },  "consequence", "\n", { ( STATEMENT )})), "rest";
+
+TURNS = "turns", IDENTIFIER, TERM, ":", TERM, "\n", {( STATEMENT )}, "rest";
+
+TERM = NUMBER | IDENTIFIER;
+IDENTIFIER = LETTER, { LETTER | DIGIT | "_" } ;
+NUMBER = DIGIT, { DIGIT } ;
+LETTER = ( "a" | "..." | "z" | "A" | "..." | "Z" ) ;
+DIGIT = ( "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "0" ) ;
+STRING = ({LETTER | DIGIT | "_"});
