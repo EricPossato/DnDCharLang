@@ -1,0 +1,8 @@
+stat var1 10;
+modify var2 +5;
+say (var1 DC 20);
+turns var3 1 : 2;
+  stat var4 3;
+  modify var5 -4;
+  say (var3 DC 10);
+rest;
