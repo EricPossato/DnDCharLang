@@ -13,7 +13,7 @@
 
 %token STAT_TYPE NARRATION_TYPE SAY TURNS ACTION CHECK SUCCESS CONSEQUENCE REST DC_OP EOL
 %token OPEN_PAR CLOSE_PAR ADD_OP SUB_OP MUL_OP DIV_OP ASSIGN
-%token IDENTIFIER NUMBER STRING
+%token IDENTIFIER NUMBER STRING NOT READ
 
 %type <str> IDENTIFIER STRING 
 %type <num> NUMBER
@@ -22,12 +22,12 @@
 
 %%
 
-program: block
+program: block {printf("Program parsed\n");}
        ;
 
 
 
-block: statement_list 
+block: statement_list {printf("block parsed\n");}
      ;
 
 statement_list: /* empty */
@@ -39,7 +39,6 @@ statement: EOL
     | NARRATION_TYPE IDENTIFIER EOL
     | NARRATION_TYPE IDENTIFIER ASSIGN STRING EOL
     | IDENTIFIER ASSIGN rel_exp EOL
-    | IDENTIFIER ASSIGN STRING EOL
     | STAT_TYPE IDENTIFIER ASSIGN rel_exp EOL
     | SAY OPEN_PAR rel_exp CLOSE_PAR EOL
     | TURNS rel_exp ACTION EOL statement_list REST EOL
@@ -49,19 +48,19 @@ statement: EOL
 
 rel_exp:
     expression
-    | rel_exp DC_OP expression
+    | expression DC_OP expression
     ;
 
 expression:
     term
-    | expression ADD_OP term
-    | expression SUB_OP term
+    | term ADD_OP term
+    | term SUB_OP term
     ;
 
 term:
     factor
-    | term MUL_OP factor
-    | term DIV_OP factor
+    | factor MUL_OP factor
+    | factor DIV_OP factor
     ;
 
 factor:
@@ -70,9 +69,9 @@ factor:
     | IDENTIFIER
     | ADD_OP factor
     | SUB_OP factor
-    | "not" factor
+    | NOT factor
     | OPEN_PAR rel_exp CLOSE_PAR
-    | "read" OPEN_PAR CLOSE_PAR
+    | READ OPEN_PAR CLOSE_PAR
     ;
 
 %%

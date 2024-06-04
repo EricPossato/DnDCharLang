@@ -14,6 +14,8 @@
 "success"       { return SUCCESS; }
 "consequence"   { return CONSEQUENCE; }
 "DC"            { return DC_OP; }
+"not"           {return NOT;}
+"read"          {return READ;}
 
 "("             { return OPEN_PAR; }
 ")"             { return CLOSE_PAR; }  
