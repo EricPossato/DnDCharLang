@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+
 %}
 
 %union {
@@ -9,48 +11,68 @@
     int num;
 }
 
-%token STAT MODIFY SAY TURNS CHECK FAIL SUCCESS CONSEQUENCE REST
-%token IDENTIFIER NUMBER PLUS MINUS DC COLON LPAREN RPAREN COMMA SEMICOLON
+%token STAT_TYPE NARRATION_TYPE SAY TURNS ACTION CHECK SUCCESS CONSEQUENCE REST DC_OP EOL
+%token OPEN_PAR CLOSE_PAR ADD_OP SUB_OP MUL_OP DIV_OP ASSIGN
+%token IDENTIFIER NUMBER STRING
+
+%type <str> IDENTIFIER STRING 
+%type <num> NUMBER
+
+
 
 %%
 
-block: '{' statements '}' { printf("Block parsed.\n"); }
-     ;
-
-statements: /* empty */
-          | statements statement '\n'
-          ;
-
-statement: assignment
-         | modify
-         | say
-         | turns
-         | check
-         ;
-
-assignment: STAT IDENTIFIER rel_exp { printf("Assignment statement parsed.\n"); }
-          ;
-
-modify: MODIFY IDENTIFIER PLUS term
-      | MODIFY IDENTIFIER MINUS term
-      ;
-
-say: SAY LPAREN rel_exp RPAREN { printf("Say statement parsed.\n"); }
-   ;
-
-rel_exp: term
-       | term DC term { printf("Relational expression parsed.\n"); }
+program: block
        ;
 
-check: FAIL check
-      | CHECK IDENTIFIER DC term '\n' SUCCESS '{' statements '}' CONSEQUENCE '\n' '{' statements '}' REST { printf("Check statement parsed.\n"); }
-      ;
 
-turns: TURNS IDENTIFIER term COLON term '\n' '{' statements '}' REST { printf("Turns statement parsed.\n"); }
+
+block: statement_list 
      ;
 
-term: NUMBER
+statement_list: /* empty */
+              | statement_list statement
+              ;
+
+statement: EOL
+    | STAT_TYPE IDENTIFIER EOL
+    | NARRATION_TYPE IDENTIFIER EOL
+    | NARRATION_TYPE IDENTIFIER ASSIGN STRING EOL
+    | IDENTIFIER ASSIGN rel_exp EOL
+    | IDENTIFIER ASSIGN STRING EOL
+    | STAT_TYPE IDENTIFIER ASSIGN rel_exp EOL
+    | SAY OPEN_PAR rel_exp CLOSE_PAR EOL
+    | TURNS rel_exp ACTION EOL statement_list REST EOL
+    | CHECK rel_exp EOL SUCCESS statement_list CONSEQUENCE EOL statement_list REST EOL
+    ;
+
+
+rel_exp:
+    expression
+    | rel_exp DC_OP expression
+    ;
+
+expression:
+    term
+    | expression ADD_OP term
+    | expression SUB_OP term
+    ;
+
+term:
+    factor
+    | term MUL_OP factor
+    | term DIV_OP factor
+    ;
+
+factor:
+    NUMBER
+    | STRING
     | IDENTIFIER
+    | ADD_OP factor
+    | SUB_OP factor
+    | "not" factor
+    | OPEN_PAR rel_exp CLOSE_PAR
+    | "read" OPEN_PAR CLOSE_PAR
     ;
 
 %%
@@ -61,6 +83,5 @@ int yyerror(const char *msg) {
 }
 
 int main() {
-    yyparse();
-    return 0;
+    return yyparse();
 }

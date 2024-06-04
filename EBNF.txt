@@ -1,19 +1,22 @@
 BLOCK = { STATEMENT };
 
-STATEMENT = [ ASSIGNMENT | MODIFY | SAY | TURNS | CHECK ], "\n" ;
+STATEMENT = [ ASSIGNMENT |("stat"|"narration"), IDENTIFIER, ["=", REL_EXP] | SAY | TURNS | CHECK ], "\n" ;
 
-ASSIGNMENT = "stat", IDENTIFIER, REL_EXP;
-MODIFY = "modify", IDENTIFIER, ("+" | "-"), TERM;
+ASSIGNMENT = IDENTIFIER, "=",  REL_EXP;
 SAY = "say", "(", REL_EXP, ")" ;
 
-REL_EXP = TERM, { "DC", TERM } ;
+
+REL_EXP = EXPRESSION, { "DC", EXPRESSION } ;
+EXPRESSION = TERM, { ("+" | "-" ), TERM } ;
+TERM = FACTOR, { ("*" | "/"), FACTOR } ;
+FACTOR = NUMBER | STRING |IDENTIFIER | (("+" | "-" | "not"), FACTOR ) | "(", REL_EXP, ")" | "read", "(", ")" ;
 
 
-CHECK = (("fail", CHECK) | ("check", IDENTIFIER, "DC", TERM, "\n","success", { ( STATEMENT ) },  "consequence", "\n", { ( STATEMENT )})), "rest";
+CHECK = ("check", REL_EXP, "\n","success", { ( STATEMENT ) },  "consequence", "\n", { ( STATEMENT )}), "rest";
+TURNS = "turns", REL_EXP,"action","\n",{ ( STATEMENT )}, "rest";
 
-TURNS = "turns", IDENTIFIER, TERM, ":", TERM, "\n", {( STATEMENT )}, "rest";
 
-TERM = NUMBER | IDENTIFIER;
+
 IDENTIFIER = LETTER, { LETTER | DIGIT | "_" } ;
 NUMBER = DIGIT, { DIGIT } ;
 LETTER = ( "a" | "..." | "z" | "A" | "..." | "Z" ) ;
