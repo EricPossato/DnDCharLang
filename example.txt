@@ -9,6 +9,6 @@ consequence
 say ("you suck")
 rest
 
-turns action
+turns 5 action
 say("Attack!")
 rest

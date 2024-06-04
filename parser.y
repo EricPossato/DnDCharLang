@@ -31,7 +31,7 @@ block: statement_list {printf("block parsed\n");}
      ;
 
 statement_list: /* empty */
-              | statement_list statement
+              | statement_list statement {printf("statement parsed\n");}
               ;
 
 statement: EOL
@@ -40,15 +40,15 @@ statement: EOL
     | NARRATION_TYPE IDENTIFIER ASSIGN STRING EOL
     | IDENTIFIER ASSIGN rel_exp EOL
     | STAT_TYPE IDENTIFIER ASSIGN rel_exp EOL
-    | SAY OPEN_PAR rel_exp CLOSE_PAR EOL
+    | SAY OPEN_PAR rel_exp CLOSE_PAR EOL {printf("say statement parsed\n");}
+    | CHECK rel_exp EOL SUCCESS statement_list CONSEQUENCE EOL statement_list REST;
     | TURNS rel_exp ACTION EOL statement_list REST EOL
-    | CHECK rel_exp EOL SUCCESS statement_list CONSEQUENCE EOL statement_list REST EOL
     ;
 
 
 rel_exp:
     expression
-    | expression DC_OP expression
+    | expression DC_OP expression {printf("expression parsed\n");}
     ;
 
 expression:

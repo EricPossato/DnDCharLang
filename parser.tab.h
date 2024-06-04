@@ -54,25 +54,29 @@ extern int yydebug;
     YYEOF = 0,                     /* "end of file"  */
     YYerror = 256,                 /* error  */
     YYUNDEF = 257,                 /* "invalid token"  */
-    STAT = 258,                    /* STAT  */
-    MODIFY = 259,                  /* MODIFY  */
+    STAT_TYPE = 258,               /* STAT_TYPE  */
+    NARRATION_TYPE = 259,          /* NARRATION_TYPE  */
     SAY = 260,                     /* SAY  */
     TURNS = 261,                   /* TURNS  */
-    CHECK = 262,                   /* CHECK  */
-    FAIL = 263,                    /* FAIL  */
+    ACTION = 262,                  /* ACTION  */
+    CHECK = 263,                   /* CHECK  */
     SUCCESS = 264,                 /* SUCCESS  */
     CONSEQUENCE = 265,             /* CONSEQUENCE  */
     REST = 266,                    /* REST  */
-    IDENTIFIER = 267,              /* IDENTIFIER  */
-    NUMBER = 268,                  /* NUMBER  */
-    PLUS = 269,                    /* PLUS  */
-    MINUS = 270,                   /* MINUS  */
-    DC = 271,                      /* DC  */
-    COLON = 272,                   /* COLON  */
-    LPAREN = 273,                  /* LPAREN  */
-    RPAREN = 274,                  /* RPAREN  */
-    COMMA = 275,                   /* COMMA  */
-    SEMICOLON = 276                /* SEMICOLON  */
+    DC_OP = 267,                   /* DC_OP  */
+    EOL = 268,                     /* EOL  */
+    OPEN_PAR = 269,                /* OPEN_PAR  */
+    CLOSE_PAR = 270,               /* CLOSE_PAR  */
+    ADD_OP = 271,                  /* ADD_OP  */
+    SUB_OP = 272,                  /* SUB_OP  */
+    MUL_OP = 273,                  /* MUL_OP  */
+    DIV_OP = 274,                  /* DIV_OP  */
+    ASSIGN = 275,                  /* ASSIGN  */
+    IDENTIFIER = 276,              /* IDENTIFIER  */
+    NUMBER = 277,                  /* NUMBER  */
+    STRING = 278,                  /* STRING  */
+    NOT = 279,                     /* NOT  */
+    READ = 280                     /* READ  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -81,12 +85,12 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 7 "parser.y"
+#line 9 "parser.y"
 
     char *str;
     int num;
 
-#line 90 "parser.tab.h"
+#line 94 "parser.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

@@ -16,6 +16,7 @@
 "DC"            { return DC_OP; }
 "not"           {return NOT;}
 "read"          {return READ;}
+"rest"          {return REST;}
 
 "("             { return OPEN_PAR; }
 ")"             { return CLOSE_PAR; }  
