@@ -1,2 +1,5 @@
-say(10 DC 12)
+local x = 2
+
+say(x)
+
 

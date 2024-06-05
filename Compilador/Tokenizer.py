@@ -5,7 +5,7 @@
 from Token import Token
 from PrePro import PrePro
 
-reserved = ["if","else","while","do","then","end","and","or","not","read", "say", "DC"]
+reserved = ["if","else","while","do","then","end","not","read", "say", "DC","local"]
 
 class Tokenizer:
     next = None
@@ -63,15 +63,6 @@ class Tokenizer:
                 self.next = Token("ID", self.source[start:self.position])
                 if self.next.value in reserved:
                     self.next = Token(self.next.value, None)
-            elif self.source[self.position] == ">":
-                self.next = Token(">", None)
-                self.position += 1
-            elif self.source[self.position] == ".":
-                if self.source[self.position + 1] == ".":
-                    self.next = Token("CONCAT", None)
-                    self.position += 2
-                else:
-                    raise Exception(f"Unexpected token {self.source[self.position]}")
             elif self.source[self.position] == "\"":
                 start = self.position + 1
                 self.position += 1

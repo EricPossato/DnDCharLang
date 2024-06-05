@@ -30,16 +30,13 @@ class Parser:
     @staticmethod
     def parseExpression() -> int:
         result = Parser.parseTerm()
-        while Parser.tokenizer_used.next.type == "PLUS" or Parser.tokenizer_used.next.type == "MINUS" or Parser.tokenizer_used.next.type == "CONCAT":
+        while Parser.tokenizer_used.next.type == "PLUS" or Parser.tokenizer_used.next.type == "MINUS":
             if Parser.tokenizer_used.next.type == "PLUS":
                 Parser.tokenizer_used.selectNext()
                 result = BinOp("+", [result, Parser.parseTerm()])
             elif Parser.tokenizer_used.next.type == "MINUS":
                 Parser.tokenizer_used.selectNext()
                 result = BinOp("-", [result, Parser.parseTerm()])
-            elif Parser.tokenizer_used.next.type == "CONCAT":
-                Parser.tokenizer_used.selectNext()
-                result = BinOp("CONCAT", [result, Parser.parseTerm()])
         return result
     
     @staticmethod
@@ -184,6 +181,17 @@ class Parser:
             if_block = Block(value=None,children=statements)
             if_node = IfNode(value=None, children=[result,if_block])
             return if_node
+        elif Parser.tokenizer_used.next.type == "local":
+            Parser.tokenizer_used.selectNext()
+            if Parser.tokenizer_used.next.type != "ID":
+                raise Exception(f"Unexpected token {Parser.tokenizer_used.next.type} at position {Parser.tokenizer_used.position}")
+            identifier = Identifier(Parser.tokenizer_used.next.value, [])
+            Parser.tokenizer_used.selectNext()
+            if Parser.tokenizer_used.next.type != "=":
+                return VarDec(value=None, children=[identifier])
+            else:
+                Parser.tokenizer_used.selectNext()
+                return VarDec(value=None, children=[identifier, Parser.parseRelExpression()])
         else:
             raise Exception(f"Unexpected token {Parser.tokenizer_used.next.type} at position {Parser.tokenizer_used.position}")
         

@@ -25,12 +25,6 @@ class BinOp(Node):
             return (self.children[0].evaluate(symbol_table)[0] // self.children[1].evaluate(symbol_table)[0],"INT")
         elif self.value == "DC":
             return (self.children[0].evaluate(symbol_table)[0] >= self.children[1].evaluate(symbol_table)[0],"INT")
-        elif self.value == "and":
-            return (self.children[0].evaluate(symbol_table)[0] and self.children[1].evaluate(symbol_table)[0],"INT")
-        elif self.value == "or":
-            return (self.children[0].evaluate(symbol_table)[0] or self.children[1].evaluate(symbol_table)[0],"INT")
-        elif self.value == "CONCAT":
-            return (str(self.children[0].evaluate(symbol_table)[0]) + str(self.children[1].evaluate(symbol_table)[0]),"STRING")
         else:
             raise Exception(f"Unexpected token {self.value}") 
         
