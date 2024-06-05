@@ -23,18 +23,8 @@ class BinOp(Node):
             return (self.children[0].evaluate(symbol_table)[0] * self.children[1].evaluate(symbol_table)[0],"INT")
         elif self.value == "/":
             return (self.children[0].evaluate(symbol_table)[0] // self.children[1].evaluate(symbol_table)[0],"INT")
-        elif self.value == "==":
-            both_string = self.children[0].evaluate(symbol_table)[1] == "STRING" and self.children[1].evaluate(symbol_table)[1] == "STRING"
-            both_int = self.children[0].evaluate(symbol_table)[1] == "INT" and self.children[1].evaluate(symbol_table)[1] == "INT"
-            
-            if both_string or both_int:
-                return (int(self.children[0].evaluate(symbol_table)[0] == self.children[1].evaluate(symbol_table)[0]),"INT")
-            else:
-                raise Exception(f"Invalid comparison between {self.children[0].evaluate(symbol_table)[1]} and {self.children[1].evaluate(symbol_table)[1]}")
-        elif self.value == "<":
-            return (self.children[0].evaluate(symbol_table)[0] < self.children[1].evaluate(symbol_table)[0],"INT")
-        elif self.value == ">":
-            return (self.children[0].evaluate(symbol_table)[0] > self.children[1].evaluate(symbol_table)[0],"INT")
+        elif self.value == "DC":
+            return (self.children[0].evaluate(symbol_table)[0] >= self.children[1].evaluate(symbol_table)[0],"INT")
         elif self.value == "and":
             return (self.children[0].evaluate(symbol_table)[0] and self.children[1].evaluate(symbol_table)[0],"INT")
         elif self.value == "or":

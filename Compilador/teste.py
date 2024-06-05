@@ -17,6 +17,6 @@ def test_main(args):
         print(str(e))
 
 # Teste com diferentes argumentos
-test_main(['teste.lua'])
+test_main(['teste.txt'])
 
 

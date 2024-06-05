@@ -59,7 +59,7 @@ class Parser:
             return UnOp("not", [Parser.parseFactor()])
         elif Parser.tokenizer_used.next.type == "OPENPAREN":
             Parser.tokenizer_used.selectNext()
-            result = Parser.parseBoolExpression()
+            result = Parser.parseRelExpression()
             if Parser.tokenizer_used.next.type != "CLOSEPAREN":
                 raise Exception(f"Unexpected token {Parser.tokenizer_used.next.type} at position {Parser.tokenizer_used.position}")
             Parser.tokenizer_used.selectNext()
@@ -72,10 +72,10 @@ class Parser:
                 Parser.tokenizer_used.selectNext()
                 parameters = []
                 if Parser.tokenizer_used.next.type != "CLOSEPAREN":
-                    parameters.append(Parser.parseBoolExpression())
+                    parameters.append(Parser.parseRelExpression())
                     while Parser.tokenizer_used.next.type == "COMMA":
                         Parser.tokenizer_used.selectNext()
-                        parameters.append(Parser.parseBoolExpression())
+                        parameters.append(Parser.parseRelExpression())
                 if Parser.tokenizer_used.next.type != "CLOSEPAREN":
                     raise Exception(f"Unexpected token {Parser.tokenizer_used.next.type} at position {Parser.tokenizer_used.position}")
                 Parser.tokenizer_used.selectNext()
@@ -108,27 +108,27 @@ class Parser:
 
             if Parser.tokenizer_used.next.type == "=":
                 Parser.tokenizer_used.selectNext()
-                return Assignment(value=None, children=[identifier, Parser.parseBoolExpression()])
+                return Assignment(value=None, children=[identifier, Parser.parseRelExpression()])
             elif Parser.tokenizer_used.next.type == "OPENPAREN":
                 Parser.tokenizer_used.selectNext()
                 parameters = []
                 if Parser.tokenizer_used.next.type != "CLOSEPAREN":
-                    parameters.append(Parser.parseBoolExpression())
+                    parameters.append(Parser.parseRelExpression())
                     while Parser.tokenizer_used.next.type == "COMMA":
                         Parser.tokenizer_used.selectNext()
-                        parameters.append(Parser.parseBoolExpression())
+                        parameters.append(Parser.parseRelExpression())
                 if Parser.tokenizer_used.next.type != "CLOSEPAREN":
                     raise Exception(f"Unexpected token {Parser.tokenizer_used.next.type} at position {Parser.tokenizer_used.position}")
                 Parser.tokenizer_used.selectNext()
                 return FuncCall(identifier.value, parameters)
 
-        elif Parser.tokenizer_used.next.type == "print":
+        elif Parser.tokenizer_used.next.type == "say":
             Parser.tokenizer_used.selectNext()
             
             if Parser.tokenizer_used.next.type != "OPENPAREN":
                 raise Exception(f"Unexpected token {Parser.tokenizer_used.next.type} at position {Parser.tokenizer_used.position}")
             Parser.tokenizer_used.selectNext()
-            result = Parser.parseBoolExpression()
+            result = Parser.parseRelExpression()
             if Parser.tokenizer_used.next.type != "CLOSEPAREN":
                 raise Exception(f"Unexpected token {Parser.tokenizer_used.next.type} at position {Parser.tokenizer_used.position}")
             Parser.tokenizer_used.selectNext()
@@ -136,7 +136,7 @@ class Parser:
         
         elif Parser.tokenizer_used.next.type == "while":
             Parser.tokenizer_used.selectNext()
-            result = Parser.parseBoolExpression()
+            result = Parser.parseRelExpression()
             if Parser.tokenizer_used.next.type != "do":
                 raise Exception(f"Unexpected token {Parser.tokenizer_used.next.type} at position {Parser.tokenizer_used.position}")
             Parser.tokenizer_used.selectNext()
@@ -151,7 +151,7 @@ class Parser:
         
         elif Parser.tokenizer_used.next.type == "if":
             Parser.tokenizer_used.selectNext()
-            result = Parser.parseBoolExpression()
+            result = Parser.parseRelExpression()
             if Parser.tokenizer_used.next.type != "then":
                 raise Exception(f"Unexpected token {Parser.tokenizer_used.next.type} at position {Parser.tokenizer_used.position}")
             Parser.tokenizer_used.selectNext()
@@ -184,59 +184,6 @@ class Parser:
             if_block = Block(value=None,children=statements)
             if_node = IfNode(value=None, children=[result,if_block])
             return if_node
-        
-        elif Parser.tokenizer_used.next.type == "local":
-            Parser.tokenizer_used.selectNext()
-            if Parser.tokenizer_used.next.type != "ID":
-                raise Exception(f"Unexpected token {Parser.tokenizer_used.next.type} at position {Parser.tokenizer_used.position}")
-            identifier = Identifier(Parser.tokenizer_used.next.value, [])
-            Parser.tokenizer_used.selectNext()
-            if Parser.tokenizer_used.next.type != "=":
-                return VarDec(value=None, children=[identifier])
-            else:
-                Parser.tokenizer_used.selectNext()
-                return VarDec(value=None, children=[identifier, Parser.parseBoolExpression()])
-        
-        elif Parser.tokenizer_used.next.type == "function":
-            Parser.tokenizer_used.selectNext()
-            if Parser.tokenizer_used.next.type != "ID":
-                raise Exception(f"Unexpected token {Parser.tokenizer_used.next.type} at position {Parser.tokenizer_used.position}")
-            identifier = Parser.tokenizer_used.next.value
-            Parser.tokenizer_used.selectNext()
-            if Parser.tokenizer_used.next.type != "OPENPAREN":
-                raise Exception(f"Unexpected token {Parser.tokenizer_used.next.type} at position {Parser.tokenizer_used.position}")
-            Parser.tokenizer_used.selectNext()
-            parameters = []
-            parameters.append(Identifier(identifier, []))
-            if Parser.tokenizer_used.next.type != "CLOSEPAREN":
-                if Parser.tokenizer_used.next.type != "ID":
-                    raise Exception(f"Unexpected token {Parser.tokenizer_used.next.type} at position {Parser.tokenizer_used.position}")
-                parameters.append(VarDec(Parser.tokenizer_used.next.value, []))
-                Parser.tokenizer_used.selectNext()
-                while Parser.tokenizer_used.next.type == "COMMA":
-                    Parser.tokenizer_used.selectNext()
-                    if Parser.tokenizer_used.next.type != "ID":
-                        raise Exception(f"Unexpected token {Parser.tokenizer_used.next.type} at position {Parser.tokenizer_used.position}")
-                    parameters.append(VarDec(Parser.tokenizer_used.next.value, []))
-                    Parser.tokenizer_used.selectNext()
-            if Parser.tokenizer_used.next.type != "CLOSEPAREN":
-                raise Exception(f"Unexpected token {Parser.tokenizer_used.next.type} at position {Parser.tokenizer_used.position}")
-            Parser.tokenizer_used.selectNext()
-            if Parser.tokenizer_used.next.type != "NEWLINE":
-                raise Exception(f"Unexpected token {Parser.tokenizer_used.next.type} at position {Parser.tokenizer_used.position}")
-            Parser.tokenizer_used.selectNext()
-            statements = []
-            while Parser.tokenizer_used.next.type != "end":
-                statements.append(Parser.parseStatement())
-            Parser.tokenizer_used.selectNext()
-            code_block = Block(value=None, children=statements)
-            parameters.append(code_block)
-            return FuncDec(value=None, children=parameters)
-        
-        elif Parser.tokenizer_used.next.type == "return":
-            Parser.tokenizer_used.selectNext()
-            return ReturnNode(value=None, children=[Parser.parseBoolExpression()])
-
         else:
             raise Exception(f"Unexpected token {Parser.tokenizer_used.next.type} at position {Parser.tokenizer_used.position}")
         
@@ -252,33 +199,11 @@ class Parser:
     @staticmethod
     def parseRelExpression():
         result = Parser.parseExpression()
-        if Parser.tokenizer_used.next.type == "==":
+        if Parser.tokenizer_used.next.type == "DC":
             Parser.tokenizer_used.selectNext()
-            return BinOp("==", [result, Parser.parseExpression()])
-        elif Parser.tokenizer_used.next.type == "<":
-            Parser.tokenizer_used.selectNext()
-            return BinOp("<", [result, Parser.parseExpression()])
-        elif Parser.tokenizer_used.next.type == ">":
-            Parser.tokenizer_used.selectNext()
-            return BinOp(">", [result, Parser.parseExpression()])
+            return BinOp("DC", [result, Parser.parseExpression()])
         else:
             return result
-              
-    @staticmethod
-    def parseBoolTerm():
-        result = Parser.parseRelExpression()
-        while Parser.tokenizer_used.next.type == "and":
-            Parser.tokenizer_used.selectNext()
-            result = BinOp("and", [result, Parser.parseRelExpression()])
-        return result
-    
-    @staticmethod
-    def parseBoolExpression():
-        result = Parser.parseBoolTerm()
-        while Parser.tokenizer_used.next.type == "or":
-            Parser.tokenizer_used.selectNext()
-            result = BinOp("or", [result, Parser.parseBoolTerm()])
-        return result
 
     @staticmethod
     def run(code):
