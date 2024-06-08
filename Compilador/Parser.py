@@ -130,17 +130,17 @@ class Parser:
             Parser.tokenizer_used.selectNext()
             return PrintNode(value=None, children=[result])
         
-        elif Parser.tokenizer_used.next.type == "while":
+        elif Parser.tokenizer_used.next.type == "turns":
             Parser.tokenizer_used.selectNext()
             result = Parser.parseRelExpression()
-            if Parser.tokenizer_used.next.type != "do":
+            if Parser.tokenizer_used.next.type != "action":
                 raise Exception(f"Unexpected token {Parser.tokenizer_used.next.type} at position {Parser.tokenizer_used.position}")
             Parser.tokenizer_used.selectNext()
             if Parser.tokenizer_used.next.type != "NEWLINE":
                 raise Exception(f"Unexpected token {Parser.tokenizer_used.next.type} at position {Parser.tokenizer_used.position}")
             Parser.tokenizer_used.selectNext()
             statements = []
-            while Parser.tokenizer_used.next.type != "end":
+            while Parser.tokenizer_used.next.type != "rest":
                 statements.append(Parser.parseStatement())
             Parser.tokenizer_used.selectNext()
             return WhileNode(value=None, children=[result, Block(None, statements)])

@@ -10,3 +10,8 @@ consequence
 x = x+2
 say(x)
 rest
+
+turns x DC 5 action
+    x = x - 1
+    say(x)
+rest
