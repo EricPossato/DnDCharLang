@@ -41,7 +41,7 @@ statement: EOL
     | IDENTIFIER ASSIGN rel_exp EOL
     | STAT_TYPE IDENTIFIER ASSIGN rel_exp EOL
     | SAY OPEN_PAR rel_exp CLOSE_PAR EOL {printf("say statement parsed\n");}
-    | CHECK rel_exp EOL SUCCESS statement_list CONSEQUENCE EOL statement_list REST;
+    | CHECK rel_exp EOL SUCCESS statement_list CONSEQUENCE statement_list REST;
     | TURNS rel_exp ACTION EOL statement_list REST EOL
     ;
 

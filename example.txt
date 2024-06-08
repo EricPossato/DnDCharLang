@@ -3,12 +3,12 @@ narration speech
 speech = "curse you!"
 
 check x DC 10
-success
-say("you did it")
-consequence
-say ("you suck")
+success say("you did it")
+say("congrats")
+consequence say("you suck")
+say("just kidding")
 rest
 
-turns 5 action
+turns (1 DC 10) action
 say("Attack!")
 rest
