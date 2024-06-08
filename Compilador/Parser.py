@@ -197,6 +197,34 @@ class Parser:
                     raise Exception(f"Invalid type {type(val)} in VarDec")
                 return VarDec(None, [identifier, typeNode, val])
             return VarDec(None, [identifier, typeNode])
+        elif Parser.tokenizer_used.next.type == "check":
+            Parser.tokenizer_used.selectNext()
+            result = Parser.parseRelExpression()
+            if Parser.tokenizer_used.next.type != "NEWLINE":
+                raise Exception(f"Unexpected token {Parser.tokenizer_used.next.type} at position {Parser.tokenizer_used.position}")
+            Parser.tokenizer_used.selectNext()
+            if Parser.tokenizer_used.next.type != "success":
+                raise Exception(f"Unexpected token {Parser.tokenizer_used.next.type} at position {Parser.tokenizer_used.position}")
+            Parser.tokenizer_used.selectNext()
+            statements = []
+            while Parser.tokenizer_used.next.type != "consequence":
+                statements.append(Parser.parseStatement())
+            Parser.tokenizer_used.selectNext()
+            success_block = Block(None, statements)
+            consequence_statements = []
+            while Parser.tokenizer_used.next.type != "rest":
+                consequence_statements.append(Parser.parseStatement())
+            Parser.tokenizer_used.selectNext()
+            if Parser.tokenizer_used.next.type != "NEWLINE" and Parser.tokenizer_used.next.type != "EOF":
+                raise Exception(f"Unexpected token {Parser.tokenizer_used.next.type} at position {Parser.tokenizer_used.position}")
+            consequence_block = Block(None, consequence_statements)
+
+            check_node = IfNode(None, [result, success_block, consequence_block])
+            return check_node
+
+
+            
+
         else:
             raise Exception(f"Unexpected token {Parser.tokenizer_used.next.type} at position {Parser.tokenizer_used.position}")
         

@@ -1,3 +1,12 @@
-stat x = 10
+stat x = 8
 narration speech
 speech = "curse you!"
+
+
+check x-2 DC 8
+success
+say(speech)
+consequence
+x = x+2
+say(x)
+rest
