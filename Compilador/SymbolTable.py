@@ -11,7 +11,7 @@ class SymbolTable():
             raise Exception(f"Variable {key} not found")
         self.symbols[key] = var
 
-    def createVariable(self, key):
+    def createVariable(self, key, varType):
         if key in self.symbols:
             raise Exception(f"Variable {key} already exists")
-        self.symbols[key] = (None, None)
+        self.symbols[key] = (None, varType)

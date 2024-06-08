@@ -112,9 +112,10 @@ class StrVal(Node):
 class VarDec(Node):
 
     def evaluate(self,symbol_table):
-        symbol_table.createVariable(self.children[0].value)
-        if len(self.children) == 2:
-            var = self.children[1].evaluate(symbol_table)
+        variableType = self.children[1].value
+        symbol_table.createVariable(self.children[0].value, variableType)
+        if len(self.children) == 3:
+            var = self.children[2].evaluate(symbol_table)
             symbol_table.setValue(self.children[0].value, var)
 
 class FuncDec(Node):
@@ -145,3 +146,8 @@ class ReturnNode(Node):
     
         def evaluate(self,symbol_table):
             return self.children[0].evaluate(symbol_table)
+        
+class TypeNode(Node):
+    
+    def evaluate(self,symbol_table):
+        return self.value

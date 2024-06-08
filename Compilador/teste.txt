@@ -1,5 +1,2 @@
-local x = 2
-
+stat x = (10+2)
 say(x)
-
-

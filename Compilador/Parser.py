@@ -3,8 +3,7 @@
 #Methods: parseExpression(), run(code : string)
 
 from Tokenizer import Tokenizer
-from Nodes import Node, BinOp, UnOp, IntVal, NoOp, Block, Assignment, Identifier, PrintNode, IfNode, WhileNode, ReadNode, StrVal, VarDec, FuncDec, FuncCall, ReturnNode
-
+from Nodes import Node, BinOp, UnOp, IntVal, NoOp, Block, Assignment, Identifier, PrintNode, IfNode, WhileNode, ReadNode, StrVal, VarDec, FuncDec, FuncCall, ReturnNode, TypeNode
 class Parser:
 
     tokenizer_used = Tokenizer
@@ -181,17 +180,23 @@ class Parser:
             if_block = Block(value=None,children=statements)
             if_node = IfNode(value=None, children=[result,if_block])
             return if_node
-        elif Parser.tokenizer_used.next.type == "local":
+        elif Parser.tokenizer_used.next.type == "stat" or Parser.tokenizer_used.next.type == "narration":
+            variableType = Parser.tokenizer_used.next.type
+            typeNode = TypeNode(variableType, [])
             Parser.tokenizer_used.selectNext()
             if Parser.tokenizer_used.next.type != "ID":
                 raise Exception(f"Unexpected token {Parser.tokenizer_used.next.type} at position {Parser.tokenizer_used.position}")
             identifier = Identifier(Parser.tokenizer_used.next.value, [])
             Parser.tokenizer_used.selectNext()
-            if Parser.tokenizer_used.next.type != "=":
-                return VarDec(value=None, children=[identifier])
-            else:
+            if Parser.tokenizer_used.next.type == "=":
                 Parser.tokenizer_used.selectNext()
-                return VarDec(value=None, children=[identifier, Parser.parseRelExpression()])
+                val = Parser.parseRelExpression()
+                if variableType == "stat" and type(val) != IntVal:
+                    raise Exception(f"Invalid type {type(val)} in VarDec")
+                elif variableType == "narration" and type(val) != StrVal:
+                    raise Exception(f"Invalid type {type(val)} in VarDec")
+                return VarDec(None, [identifier, typeNode, val])
+            return VarDec(None, [identifier, typeNode])
         else:
             raise Exception(f"Unexpected token {Parser.tokenizer_used.next.type} at position {Parser.tokenizer_used.position}")
         
