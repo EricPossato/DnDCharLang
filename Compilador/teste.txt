@@ -22,7 +22,7 @@ rest
 
 turns (enemyHP DC 0) action
     say("Roll to attack!")
-    dice = 1 + 1
+    dice = roll(20) + STR
     say(dice)
     check dice DC 15
     success
