@@ -1,6 +1,6 @@
 BLOCK = { STATEMENT };
 
-STATEMENT = [ ASSIGNMENT |("stat"|"narration"), IDENTIFIER, ["=", REL_EXP] | SAY |"roll", "(", REL_EXP, ")"| TURNS | CHECK ], "\n" ;
+STATEMENT = [ ASSIGNMENT |("stat"|"narration"), IDENTIFIER, ["=", REL_EXP] | SAY | TURNS | CHECK ], "\n" ;
 
 ASSIGNMENT = IDENTIFIER, "=",  REL_EXP;
 SAY = "say", "(", REL_EXP, ")" ;
@@ -9,7 +9,7 @@ SAY = "say", "(", REL_EXP, ")" ;
 REL_EXP = EXPRESSION, { "DC", EXPRESSION } ;
 EXPRESSION = TERM, { ("+" | "-" ), TERM } ;
 TERM = FACTOR, { ("*" | "/"), FACTOR } ;
-FACTOR = NUMBER | STRING |IDENTIFIER | (("+" | "-" | "not"), FACTOR ) | "(", REL_EXP, ")" | "read", "(", ")" ;
+FACTOR = NUMBER | STRING |IDENTIFIER | (("+" | "-" | "not"), FACTOR ) | "(", REL_EXP, ")" | "roll", "(",REL_EXP, ")" ;
 
 
 CHECK = ("check", REL_EXP, "\n","success", { ( STATEMENT ) },  "consequence", { ( STATEMENT )}), "rest";
