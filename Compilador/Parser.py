@@ -3,7 +3,7 @@
 #Methods: parseExpression(), run(code : string)
 
 from Tokenizer import Tokenizer
-from Nodes import Node, BinOp, UnOp, IntVal, NoOp, Block, Assignment, Identifier, PrintNode, IfNode, WhileNode, ReadNode, StrVal, VarDec, FuncDec, FuncCall, ReturnNode, TypeNode
+from Nodes import Node, BinOp, UnOp, IntVal, NoOp, Block, Assignment, Identifier, PrintNode, IfNode, WhileNode, RollNode, StrVal, VarDec, FuncDec, FuncCall, ReturnNode, TypeNode
 class Parser:
 
     tokenizer_used = Tokenizer
@@ -77,15 +77,16 @@ class Parser:
                 Parser.tokenizer_used.selectNext()
                 result = FuncCall(identifier, parameters)
             return result
-        elif Parser.tokenizer_used.next.type == "read":
+        elif Parser.tokenizer_used.next.type == "roll":
             Parser.tokenizer_used.selectNext()
             if Parser.tokenizer_used.next.type != "OPENPAREN":
                 raise Exception(f"Unexpected token {Parser.tokenizer_used.next.type} at position {Parser.tokenizer_used.position}")
             Parser.tokenizer_used.selectNext()
+            result = Parser.parseRelExpression()
             if Parser.tokenizer_used.next.type != "CLOSEPAREN":
                 raise Exception(f"Unexpected token {Parser.tokenizer_used.next.type} at position {Parser.tokenizer_used.position}")
             Parser.tokenizer_used.selectNext()
-            return ReadNode(None, [])
+            return RollNode(None, children=[result])
         elif Parser.tokenizer_used.next.type == "STRING":
             result = StrVal(Parser.tokenizer_used.next.value, [])
             Parser.tokenizer_used.selectNext()

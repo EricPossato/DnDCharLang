@@ -5,7 +5,7 @@
 from Token import Token
 from PrePro import PrePro
 
-reserved = ["while","do","then","end","not","read", "say", "DC","local","stat","narration", "check", "success", "consequence","rest","turns","action"]
+reserved = ["while","do","then","end","not","roll", "say", "DC","local","stat","narration", "check", "success", "consequence","rest","turns","action"]
 
 class Tokenizer:
     next = None

@@ -1,17 +1,39 @@
-stat x = 8
-narration speech
-speech = "curse you!"
+stat STR = 16
+STR = (STR -10)/2
+stat DEX = 13
+DEX = (DEX -10)/2
+stat PROF = 2
+stat HP = 8
+stat dice
+stat damagedice
+stat enemyHP = 10
 
+say("You arrive at a forest, there is no clear way forward, but you spot a path after thorny bushes ahead, you must vault over a tree to get over the bushes safely")
+dice = roll(20) + DEX
+say(dice)
 
-check x-2 DC 8
+check dice DC 10
 success
-say(speech)
+say("You vault over the bushes successfuly and meet a goblin")
 consequence
-x = x+2
-say(x)
+say("You manage to vault over the bushes, but get hurt by the thorns, you take 1 damage to your HP")
+HP = HP-1
+say("After getting back on your feet, you meet a goblin")
 rest
 
-turns x DC 5 action
-    x = x - 1
-    say(x)
+turns (enemyHP DC 0) action
+    say("Roll to attack!")
+    dice = roll(20) + STR + PROF
+    say(dice)
+    check dice DC 15
+    success
+        say("You hit the goblin")
+        damagedice = roll(6) + STR
+        enemyHP = enemyHP - damagedice
+        say(enemyHP)
+    consequence
+        say("You miss, LMAO")
+    rest
 rest
+
+say("You have killed the goblin, congratulations! Now follow along with your adventure")

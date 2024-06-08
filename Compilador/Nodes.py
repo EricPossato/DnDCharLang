@@ -1,6 +1,8 @@
 from abc import ABC, abstractmethod
 from SymbolTable import SymbolTable
 from FunctionTable import FunctionTable
+from random import randint
+
 class Node(ABC):
     
     def __init__(self, value, children):
@@ -97,10 +99,14 @@ class WhileNode(Node):
             while self.children[0].evaluate(symbol_table)[0]:
                 self.children[1].evaluate(symbol_table)
 
-class ReadNode(Node):
-    
+class RollNode(Node):
+
     def evaluate(self,symbol_table):
-        val = int(input())
+        target = self.children[0].evaluate(symbol_table)
+        if target[1] == "INT":
+            val = randint(1, target[0])
+        else:
+            raise Exception(f"Invalid type {target[1]} in PrintNode.evaluate()")
         return (val,"INT")
         
 
