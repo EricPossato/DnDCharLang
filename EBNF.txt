@@ -12,7 +12,7 @@ TERM = FACTOR, { ("*" | "/"), FACTOR } ;
 FACTOR = NUMBER | STRING |IDENTIFIER | (("+" | "-" | "not"), FACTOR ) | "(", REL_EXP, ")" | "read", "(", ")" ;
 
 
-CHECK = ("check", REL_EXP, "\n","success", { ( STATEMENT ) },  "consequence", "\n", { ( STATEMENT )}), "rest";
+CHECK = ("check", REL_EXP, "\n","success", { ( STATEMENT ) },  "consequence", { ( STATEMENT )}), "rest";
 TURNS = "turns", REL_EXP,"action","\n",{ ( STATEMENT )}, "rest";
 
 
