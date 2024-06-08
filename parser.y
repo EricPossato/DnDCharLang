@@ -13,7 +13,7 @@
 
 %token STAT_TYPE NARRATION_TYPE SAY TURNS ACTION CHECK SUCCESS CONSEQUENCE REST DC_OP EOL
 %token OPEN_PAR CLOSE_PAR ADD_OP SUB_OP MUL_OP DIV_OP ASSIGN
-%token IDENTIFIER NUMBER STRING NOT READ
+%token IDENTIFIER NUMBER STRING NOT ROLL
 
 %type <str> IDENTIFIER STRING 
 %type <num> NUMBER
@@ -42,7 +42,7 @@ statement: EOL
     | STAT_TYPE IDENTIFIER ASSIGN rel_exp EOL
     | SAY OPEN_PAR rel_exp CLOSE_PAR EOL {printf("say statement parsed\n");}
     | CHECK rel_exp EOL SUCCESS statement_list CONSEQUENCE statement_list REST;
-    | TURNS rel_exp ACTION EOL statement_list REST EOL
+    | TURNS rel_exp ACTION EOL statement_list REST
     ;
 
 
@@ -71,7 +71,7 @@ factor:
     | SUB_OP factor
     | NOT factor
     | OPEN_PAR rel_exp CLOSE_PAR
-    | READ OPEN_PAR CLOSE_PAR
+    | ROLL OPEN_PAR rel_exp CLOSE_PAR
     ;
 
 %%

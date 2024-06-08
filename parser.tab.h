@@ -76,7 +76,7 @@ extern int yydebug;
     NUMBER = 277,                  /* NUMBER  */
     STRING = 278,                  /* STRING  */
     NOT = 279,                     /* NOT  */
-    READ = 280                     /* READ  */
+    ROLL = 280                     /* ROLL  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif

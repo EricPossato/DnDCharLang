@@ -2,7 +2,6 @@ stat STR = 16
 STR = (STR -10)/2
 stat DEX = 13
 DEX = (DEX -10)/2
-stat PROF = 2
 stat HP = 8
 stat dice
 stat damagedice
@@ -23,7 +22,7 @@ rest
 
 turns (enemyHP DC 0) action
     say("Roll to attack!")
-    dice = roll(20) + STR + PROF
+    dice = 1 + 1
     say(dice)
     check dice DC 15
     success

@@ -15,7 +15,7 @@
 "consequence"   { return CONSEQUENCE; }
 "DC"            { return DC_OP; }
 "not"           {return NOT;}
-"read"          {return READ;}
+"roll"          {return ROLL;}
 "rest"          {return REST;}
 
 "("             { return OPEN_PAR; }
