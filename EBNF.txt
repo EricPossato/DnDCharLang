@@ -1,6 +1,6 @@
 BLOCK = { STATEMENT };
 
-STATEMENT = [ ASSIGNMENT |("stat"|"narration"), IDENTIFIER, ["=", REL_EXP] | SAY | TURNS | CHECK ], "\n" ;
+STATEMENT = [ ASSIGNMENT |("stat"|"narration"), IDENTIFIER, ["=", REL_EXP] | SAY |"roll", "(", REL_EXP, ")"| TURNS | CHECK ], "\n" ;
 
 ASSIGNMENT = IDENTIFIER, "=",  REL_EXP;
 SAY = "say", "(", REL_EXP, ")" ;
