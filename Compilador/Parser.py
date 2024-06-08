@@ -144,42 +144,7 @@ class Parser:
                 statements.append(Parser.parseStatement())
             Parser.tokenizer_used.selectNext()
             return WhileNode(value=None, children=[result, Block(None, statements)])
-        
-        elif Parser.tokenizer_used.next.type == "if":
-            Parser.tokenizer_used.selectNext()
-            result = Parser.parseRelExpression()
-            if Parser.tokenizer_used.next.type != "then":
-                raise Exception(f"Unexpected token {Parser.tokenizer_used.next.type} at position {Parser.tokenizer_used.position}")
-            Parser.tokenizer_used.selectNext()
-            if Parser.tokenizer_used.next.type != "NEWLINE":
-                raise Exception(f"Unexpected token {Parser.tokenizer_used.next.type} at position {Parser.tokenizer_used.position}")
-            Parser.tokenizer_used.selectNext()
 
-            statements = []
-            while Parser.tokenizer_used.next.type != "end" and Parser.tokenizer_used.next.type != "else":
-                statements.append(Parser.parseStatement())
-            if Parser.tokenizer_used.next.type == "else":
-                if_block = Block(value=None,children=statements)
-                Parser.tokenizer_used.selectNext()
-                if Parser.tokenizer_used.next.type != "NEWLINE":
-                    raise Exception(f"Unexpected token {Parser.tokenizer_used.next.type} at position {Parser.tokenizer_used.position}")
-                Parser.tokenizer_used.selectNext()
-
-                else_statements = []
-                while Parser.tokenizer_used.next.type != "end":
-                    else_statements.append(Parser.parseStatement())
-                Parser.tokenizer_used.selectNext()
-                if Parser.tokenizer_used.next.type != "EOF" and Parser.tokenizer_used.next.type != "NEWLINE":
-                    raise Exception(f"Unexpected token {Parser.tokenizer_used.next.type} at position {Parser.tokenizer_used.position}")
-                else_block = Block(value=None,children=else_statements)
-                if_node = IfNode(value=None,children=[result,if_block,else_block])
-                return if_node
-            Parser.tokenizer_used.selectNext()
-            if Parser.tokenizer_used.next.type != "EOF" and Parser.tokenizer_used.next.type != "NEWLINE":
-                raise Exception(f"Unexpected token {Parser.tokenizer_used.next.type} at position {Parser.tokenizer_used.position}")
-            if_block = Block(value=None,children=statements)
-            if_node = IfNode(value=None, children=[result,if_block])
-            return if_node
         elif Parser.tokenizer_used.next.type == "stat" or Parser.tokenizer_used.next.type == "narration":
             variableType = Parser.tokenizer_used.next.type
             typeNode = TypeNode(variableType, [])
