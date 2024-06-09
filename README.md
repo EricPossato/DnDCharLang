@@ -35,6 +35,6 @@ STRING = ({LETTER | DIGIT | "_"});
 ```
 
 ## Diagram
-![DS](Diagrama.png)
+![DS](diagrama.png)
 
 This diagram was made by using: https://jacquev6.github.io/DrawGrammar/
