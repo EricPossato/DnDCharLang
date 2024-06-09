@@ -3,7 +3,7 @@ import subprocess
 def test_main(args):
     try:
         # Executa o arquivo main.py com os argumentos fornecidos
-        process = subprocess.Popen(['python', 'main.py'] + args, stderr=subprocess.PIPE)
+        process = subprocess.Popen(['python', './Compilador/main.py'] + args, stderr=subprocess.PIPE)
         _, stderr = process.communicate()
 
         # Verifica se houve erros no stderr
@@ -17,6 +17,6 @@ def test_main(args):
         print(str(e))
 
 # Teste com diferentes argumentos
-test_main(['teste.txt'])
+test_main(['./Compilador/example.dndl'])
 
 
