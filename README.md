@@ -1,4 +1,4 @@
-# DnDCharLang
+# DnD Langage
 
 This is a custom coding language based on Dungeons & Dragons
 
@@ -38,3 +38,6 @@ STRING = ({LETTER | DIGIT | "_"});
 ![DS](diagrama.png)
 
 This diagram was made by using: https://jacquev6.github.io/DrawGrammar/
+
+## Apresentação
+[DnD language presentation](apresentacao.pdf)
